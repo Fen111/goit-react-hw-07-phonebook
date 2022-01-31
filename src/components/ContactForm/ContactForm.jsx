@@ -1,14 +1,16 @@
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { getItems } from '../../redux/selectors';
-import actions from 'redux/actions';
+import {
+  useFetchContactsQuery,
+  useAddContactMutation,
+} from 'redux/contactsSlice';
 import s from './ContactForm.module.css';
 
 export default function ContactForm() {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const contacts = useSelector(getItems);
-  const dispatch = useDispatch();
+
+  const { data: contacts } = useFetchContactsQuery();
+  const [addContact] = useAddContactMutation();
 
   const handleChange = event => {
     const { name, value } = event.target;
@@ -24,7 +26,7 @@ export default function ContactForm() {
       alert(`${data.number} is already in contacts!`);
       return;
     }
-    dispatch(actions.addContact({ name, number }));
+    addContact({ name, number });
   };
 
   const handleSubmit = event => {

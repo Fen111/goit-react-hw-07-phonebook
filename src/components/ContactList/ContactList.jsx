@@ -1,22 +1,31 @@
-import PropTypes from 'prop-types';
+import { useFetchContactsQuery } from 'redux/contactsSlice';
 import { useSelector } from 'react-redux';
 import ContactListItem from 'components/ContactList/ContactListItem';
 import s from './ContactList.module.css';
-import { getVisibleContacts } from 'redux/selectors';
+import { getFilter } from 'redux/selectors';
 
 export default function ContactList() {
-  const contacts = useSelector(getVisibleContacts);
+  const { data: contacts } = useFetchContactsQuery();
+  const filter = useSelector(getFilter);
 
   return (
-    <ul className={s.list}>
-      {contacts.map(({ id, name, number }) => (
-        <ContactListItem key={id} name={name} number={number} id={id} />
-      ))}
-    </ul>
+    <>
+      {contacts && (
+        <ul className={s.list}>
+          {contacts
+            .filter(contact =>
+              contact.name.toLowerCase().includes(filter.toLowerCase()),
+            )
+            .map(contact => (
+              <ContactListItem key={contact.id} {...contact} />
+            ))}
+        </ul>
+        // <ul className={s.list}>
+        //   {contacts.map(({ id, name, number }) => (
+        //     <ContactListItem key={id} name={name} number={number} id={id} />
+        //   ))}
+        // </ul>
+      )}
+    </>
   );
 }
-
-ContactList.propTypes = {
-  name: PropTypes.string,
-  number: PropTypes.number,
-};
