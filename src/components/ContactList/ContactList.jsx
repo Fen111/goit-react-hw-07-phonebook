@@ -20,11 +20,6 @@ export default function ContactList() {
               <ContactListItem key={contact.id} {...contact} />
             ))}
         </ul>
-        // <ul className={s.list}>
-        //   {contacts.map(({ id, name, number }) => (
-        //     <ContactListItem key={id} name={name} number={number} id={id} />
-        //   ))}
-        // </ul>
       )}
     </>
   );
